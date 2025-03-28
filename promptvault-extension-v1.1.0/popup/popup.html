@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptVault</title>
+  <link href="popup.css" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="logo">
+        <img src="../icons/icon48.png" alt="PromptVault" class="logo-icon">
+        <h1>PromptVault</h1>
+      </div>
+      <button id="saveCurrentBtn" class="primary-button">Save Current</button>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-button active" data-tab="prompts">All Prompts</button>
+      <button class="tab-button" data-tab="folders">Folders</button>
+      <button class="tab-button" data-tab="settings">Settings</button>
+    </div>
+
+    <div class="tab-content active" id="prompts-tab">
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search prompts...">
+        <div class="tags-container" id="tagsList">
+          <!-- Tags will be populated here -->
+        </div>
+        <button id="newTagBtn" class="tag-button">+ New Tag</button>
+      </div>
+
+      <h2 class="section-title">
+        <span>Recent Prompts</span>
+        <button id="sortBtn" class="icon-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"></path>
+            <path d="M7 12h10"></path>
+            <path d="M11 18h4"></path>
+          </svg>
+          Sort
+        </button>
+      </h2>
+
+      <div class="prompts-list" id="promptsList">
+        <!-- Prompts will be populated here -->
+      </div>
+    </div>
+
+    <div class="tab-content" id="folders-tab">
+      <div class="folders-container" id="foldersList">
+        <!-- Folders will be populated here -->
+      </div>
+      <button id="newFolderBtn" class="secondary-button">+ New Folder</button>
+    </div>
+
+    <div class="tab-content" id="settings-tab">
+      <h2 class="section-title">Settings</h2>
+      
+      <div class="settings-section">
+        <h3>Tag Management</h3>
+        <div class="settings-tags-list" id="settingsTagsList">
+          <!-- Tags with delete buttons will be populated here -->
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h3>Folder Management</h3>
+        <div class="settings-folders-list" id="settingsFoldersList">
+          <!-- Folders with delete buttons will be populated here -->
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h3>Privacy Policy</h3>
+        <div class="privacy-policy-container">
+          <div class="privacy-policy-content" id="privacyPolicy">
+            <h4>Privacy Policy for PromptVault</h4>
+            <p class="privacy-date">Effective Date: March 28, 2025</p>
+            
+            <h5>1. Introduction</h5>
+            <p>PromptVault is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your data when you use our Chrome extension.</p>
+            
+            <h5>2. Information We Collect</h5>
+            <p>Prompt Data: We capture and store conversation prompts and responses from supported AI platforms (ChatGPT, Claude, Gemini).</p>
+            <p>Tags and Folder Information: Users can categorize and tag prompts for better organization.</p>
+            
+            <h5>3. How We Use Your Data</h5>
+            <p>We use the collected data solely to:</p>
+            <ul>
+              <li>Save and organize AI-generated prompts.</li>
+              <li>Provide search and filtering functionality.</li>
+              <li>Sync data across devices (if cloud sync is enabled).</li>
+            </ul>
+            
+            <h5>4. Data Security</h5>
+            <p>We implement strong security measures to protect your data. All stored data is encrypted, and cloud sync (if enabled) uses secure protocols.</p>
+            
+            <h5>5. Third-Party Disclosure</h5>
+            <p>We do not sell or transfer user data to third parties. All information remains private and is not shared outside the extension's intended functionality.</p>
+            
+            <h5>6. User Control</h5>
+            <p>Users can delete their saved prompts or disable cloud sync at any time.</p>
+            
+            <h5>7. Changes to This Policy</h5>
+            <p>We may update this Privacy Policy periodically. Users will be notified of any changes.</p>
+            
+            <div class="privacy-link-container">
+              <a href="https://sites.google.com/view/promptvault/მთავარი" target="_blank" class="privacy-view-link">
+                View Privacy Policy in Browser
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Templates -->
+  <div class="modal" id="savePromptModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Save Prompt</h3>
+        <button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="promptText">Text</label>
+          <textarea id="promptText" rows="6"></textarea>
+        </div>
+        
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="typePrompt" name="promptType" value="prompt" checked>
+            <label for="typePrompt">Prompt</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="typeResponse" name="promptType" value="response">
+            <label for="typeResponse">Response</label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="folderSelect">Folder</label>
+          <select id="folderSelect">
+            <option value="null">No folder</option>
+            <!-- Folders will be populated here -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Tags</label>
+          <div class="modal-tags-container" id="modalTagsList">
+            <!-- Tags will be populated here -->
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="titleInput">Title</label>
+          <input type="text" id="titleInput" placeholder="Enter a title for this prompt">
+        </div>
+        
+        <div class="form-group">
+          <label for="sourceInput">Source</label>
+          <input type="text" id="sourceInput" placeholder="Source of this prompt">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="secondary-button close-modal-button">Cancel</button>
+        <button id="savePromptBtn" class="primary-button">Save Prompt</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="tagModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create New Tag</h3>
+        <button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="tagNameInput">Tag Name</label>
+          <input type="text" id="tagNameInput" placeholder="Enter tag name">
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <div class="color-options">
+            <div class="color-option" data-color="#4A7BF7"></div>
+            <div class="color-option" data-color="#10B981"></div>
+            <div class="color-option" data-color="#F59E0B"></div>
+            <div class="color-option" data-color="#EF4444"></div>
+            <div class="color-option" data-color="#8B5CF6"></div>
+            <div class="color-option" data-color="#EC4899"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="secondary-button close-modal-button">Cancel</button>
+        <button id="createTagBtn" class="primary-button">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="folderModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create New Folder</h3>
+        <button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="folderNameInput">Folder Name</label>
+          <input type="text" id="folderNameInput" placeholder="Enter folder name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="secondary-button close-modal-button">Cancel</button>
+        <button id="createFolderBtn" class="primary-button">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="viewPromptModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="viewPromptTitle">Prompt Title</h3>
+        <button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="view-prompt-tags" id="viewPromptTags">
+          <!-- Tags will be populated here -->
+        </div>
+        
+        <div class="view-prompt-section">
+          <h4>Prompt</h4>
+          <pre id="viewPromptText"></pre>
+        </div>
+        
+        <div class="view-prompt-section" id="viewResponseSection">
+          <h4>Response</h4>
+          <pre id="viewResponseText"></pre>
+        </div>
+        
+        <div class="prompt-meta">
+          <div class="prompt-meta-item" id="viewPromptFolder"></div>
+          <div class="prompt-meta-item" id="viewPromptDate"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-footer-actions">
+          <button id="deletePromptBtn" class="danger-button">Delete</button>
+          <div class="move-folder-container">
+            <select id="moveToFolderSelect">
+              <option value="">Move to folder...</option>
+              <option value="null">No folder</option>
+              <!-- Folders will be populated here -->
+            </select>
+            <button id="moveToFolderBtn" class="secondary-button">Move</button>
+          </div>
+        </div>
+        <div class="modal-footer-main">
+          <button class="secondary-button close-modal-button">Close</button>
+          <button id="copyPromptBtn" class="primary-button">Copy to Clipboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+/* PromptVault Content Script Styles */
+
+/* Capture Button */
+.pv-capture-button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.pv-capture-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #4A7BF7;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pv-capture-button:hover {
+  background-color: #3a6ad7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.pv-capture-button:active {
+  transform: translateY(0);
+}
+
+.pv-capture-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Notifications */
+.pv-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10000;
+  animation: slide-in 0.3s ease;
+  min-width: 200px;
+  max-width: 300px;
+  text-align: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.pv-notification-success {
+  background-color: #10B981;
+  color: white;
+}
+
+.pv-notification-error {
+  background-color: #EF4444;
+  color: white;
+}
+
+.pv-notification-hide {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
